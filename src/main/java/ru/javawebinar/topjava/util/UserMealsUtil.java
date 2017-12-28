@@ -32,15 +32,15 @@ public class UserMealsUtil {
     }
 
     private static List<UserMealWithExceed>  getFilteredWithExceeded(List<UserMeal> mealList, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
-        Map<LocalDate, Integer> dateSumCalories = new HashMap<>();
+        Map<LocalDate, Integer> dateSumCalories = new HashMap<>(); //create Map for saving caloriesPerParticularDay
         int calories = 0;
-        for(UserMeal meal : mealList){
+        for(UserMeal meal : mealList){                                                                          //Putting map
             LocalDate date = meal.getDateTime().toLocalDate();
             calories = dateSumCalories.containsKey(date) ? meal.getCalories()+calories : meal.getCalories();
             dateSumCalories.put(date, calories);
         }
         List<UserMealWithExceed> result = new ArrayList<>();
-        for (UserMeal meal: mealList){
+        for (UserMeal meal: mealList){                                  //adding items with exceeded
             if (TimeUtil.isBetween(meal.getDateTime().toLocalTime(),startTime, endTime)) {
             result.add(createUserMealExceeded(meal, dateSumCalories.get(meal.getDateTime().toLocalDate()) > caloriesPerDay));
             }
